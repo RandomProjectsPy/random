@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Signal Lost</title>
+<style>
+*{
+    box-sizing:border-box;
+    font-family: monospace;
+}
+body{
+    margin:0;
+    background:#000;
+    color:#0f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    overflow:hidden;
+}
+.container{
+    width:90%;
+    max-width:600px;
+    border:1px solid #0f0;
+    padding:20px;
+    background:#010;
+    box-shadow:0 0 20px #0f0;
+}
+h1{
+    font-size:18px;
+    margin-bottom:10px;
+    letter-spacing:2px;
+}
+.log{
+    height:260px;
+    border:1px solid #0f0;
+    padding:10px;
+    overflow-y:auto;
+    font-size:13px;
+    background:#000;
+}
+.status{
+    margin-top:10px;
+    font-size:12px;
+    opacity:0.8;
+}
+.glitch{
+    animation: glitch 0.15s infinite;
+}
+.hidden{
+    display:none;
+}
+@keyframes glitch{
+    0%{transform:translate(0)}
+    20%{transform:translate(-1px,1px)}
+    40%{transform:translate(1px,-1px)}
+    60%{transform:translate(-1px,0)}
+    80%{transform:translate(1px,1px)}
+    100%{transform:translate(0)}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SIGNAL STATUS: UNKNOWN</h1>
+    <div class="log" id="log"></div>
+    <div class="status" id="status">
+        last sync: never<br>
+        source: ██████<br>
+        integrity: unstable
+    </div>
+    <div class="hidden" id="secret">
+        THEY ARE NOT LISTENING.
+    </div>
+</div>
+
+<script>
+const log = document.getElementById("log");
+const status = document.getElementById("status");
+const secret = document.getElementById("secret");
+
+const messages = [
+    "attempting connection...",
+    "no response",
+    "signal fragment received",
+    "packet corrupted",
+    "time reference mismatch",
+    "unknown carrier wave",
+    "origin unresolved",
+    "do not reply"
+];
+
+function addLine(text){
+    const line = document.createElement("div");
+    line.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+}
+
+setInterval(()=>{
+    addLine(messages[Math.floor(Math.random()*messages.length)]);
+    if(Math.random() > 0.8){
+        document.body.classList.add("glitch");
+        setTimeout(()=>document.body.classList.remove("glitch"),200);
+    }
+},2000);
+
+let input = "";
+const trigger = "listen";
+
+document.addEventListener("keydown", e=>{
+    input += e.key.toLowerCase();
+    if(!trigger.startsWith(input)) input="";
+    if(input === trigger){
+        reveal();
+        input="";
+    }
+});
+
+function reveal(){
+    addLine(">> signal stabilized");
+    status.innerHTML = "connection restored<br>voice detected";
+    secret.style.display = "block";
+    secret.classList.add("glitch");
+}
+</script>
+
+<!--
+fragment 3:
+"the signal was never lost.
+it was redirected."
+
+coordinates: 12.9716 N, 77.5946 E
+time offset: +00:03:17
+-->
+
+</body>
+</html>
