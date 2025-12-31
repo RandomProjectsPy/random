@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CORE MELTDOWN</title>
+<style>
+*{
+    box-sizing:border-box;
+    font-family: monospace;
+}
+body{
+    margin:0;
+    background:#000;
+    color:#0f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+}
+.panel{
+    width:90%;
+    max-width:420px;
+    border:2px solid #0f0;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 0 25px #0f0;
+    background:#010;
+}
+h1{
+    margin-bottom:10px;
+}
+.bar{
+    height:22px;
+    border:1px solid #0f0;
+    margin:10px 0;
+    background:#020;
+}
+.fill{
+    height:100%;
+    width:100%;
+    background:linear-gradient(90deg,#0f0,#6f6);
+    transition:width 0.2s;
+}
+button{
+    background:transparent;
+    color:#0f0;
+    border:1px solid #0f0;
+    padding:10px 20px;
+    cursor:pointer;
+    margin-top:10px;
+}
+button:hover{
+    background:#0f0;
+    color:#000;
+}
+.alert{
+    color:red;
+    margin-top:10px;
+    display:none;
+}
+.score{
+    margin-top:10px;
+    font-size:14px;
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+    <h1>⚠ CORE MELTDOWN ⚠</h1>
+    CORE STABILITY
+    <div class="bar">
+        <div class="fill" id="fill"></div>
+    </div>
+
+    <button onclick="stabilize()">STABILIZE</button>
+    <div class="alert" id="alert">🔥 SYSTEM MELTDOWN 🔥</div>
+    <div class="score" id="score">Time Survived: 0s</div>
+</div>
+
+<script>
+let stability = 100;
+let alive = true;
+let time = 0;
+
+const fill = document.getElementById("fill");
+const alertBox = document.getElementById("alert");
+const scoreBox = document.getElementById("score");
+
+setInterval(()=>{
+    if(!alive) return;
+    stability -= Math.random()*6 + 2;
+    if(stability <= 0){
+        stability = 0;
+        alive = false;
+        alertBox.style.display = "block";
+    }
+    fill.style.width = stability + "%";
+},600);
+
+setInterval(()=>{
+    if(alive){
+        time++;
+        scoreBox.textContent = "Time Survived: " + time + "s";
+    }
+},1000);
+
+function stabilize(){
+    if(!alive){
+        stability = 100;
+        alive = true;
+        time = 0;
+        alertBox.style.display = "none";
+    }
+    stability = Math.min(100, stability + 15);
+    fill.style.width = stability + "%";
+}
+</script>
+
+</body>
+</html>
